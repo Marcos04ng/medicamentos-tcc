@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DoseCerta - Menu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-menu {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: 0.3s;
+        }
+        .btn-menu:hover { transform: scale(1.02); }
+        .bg-green { background-color: #78c257; color: white; border: none; }
+        .bg-blue { background-color: #3b7ddd; color: white; border: none; }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container text-center mt-5">
+    <img th:src="@{/img/logo.png}" alt="Logo DoseCerta" style="max-height: 120px;" class="mb-4">
+
+    <h3 class="text-secondary mb-5">Menu Principal</h3>
+
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+
+            <a th:href="@{/medicamentos/novo}" class="btn btn-menu bg-green shadow-sm text-decoration-none">
+                <span>➕</span> Cadastrar Medicamento
+            </a>
+
+            <a th:href="@{/medicamentos}" class="btn btn-menu bg-blue shadow-sm text-decoration-none">
+                <span>📋</span> Listar Medicamentos
+            </a>
+
+            <a href="#" class="btn btn-menu bg-green shadow-sm text-decoration-none">
+                <span>✔️</span> Registrar Uso
+            </a>
+
+        </div>
+    </div>
+
+    <div class="fixed-bottom p-4 d-flex justify-content-between text-secondary">
+        <span>Sobre</span>
+        <span>Sair</span>
+    </div>
+</div>
+
+</body>
+</html>
