@@ -58,4 +58,26 @@ public class MedicamentoController {
         model.addAttribute("medicamento", remedio);
         return "form";
     }
+    // Rota para Registrar o Uso (Diminuir 1 do estoque)
+    @GetMapping("/medicamentos/tomar/{id}")
+    public String registrarUso(@org.springframework.web.bind.annotation.PathVariable Long id, org.springframework.web.servlet.mvc.support.RedirectAttributes attributes) {
+
+        Medicamento remedio = repository.findById(id).orElse(null);
+
+        if (remedio != null) {
+            if (remedio.getQuantidade() > 0) {
+                // Diminui 1 da quantidade
+                remedio.setQuantidade(remedio.getQuantidade() - 1);
+                repository.save(remedio);
+
+                // Manda a notificação verde de sucesso para a tela
+                attributes.addFlashAttribute("mensagemSucesso", "Dose de " + remedio.getNome() + " registrada! Estoque atualizado.");
+            } else {
+                // Manda a notificação amarela de erro (já está zerado)
+                attributes.addFlashAttribute("mensagemErro", "Atenção: O estoque de " + remedio.getNome() + " já está zerado!");
+            }
+        }
+
+        return "redirect:/medicamentos";
+    }
 }
