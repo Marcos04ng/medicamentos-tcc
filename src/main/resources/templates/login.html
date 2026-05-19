@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - DoseCerta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #145da0; /* Azul da logo no fundo inteiro */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .card-login {
+            max-width: 400px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        .btn-verde { background-color: #65b32e; color: white; border: none;}
+        .btn-verde:hover { background-color: #529424; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="card card-login bg-white p-4 mx-3">
+    <div class="text-center mb-4 mt-2">
+        <img th:src="@{/img/logo.png}" alt="Logo DoseCerta" style="max-height: 55px;">
+    </div>
+
+    <form th:action="@{/login}" method="POST">
+
+        <div th:if="${param.error}" class="alert alert-danger text-center py-2">
+            Usuário ou senha inválidos!
+        </div>
+
+        <div th:if="${param.logout}" class="alert alert-success text-center py-2">
+            Você saiu do sistema com segurança.
+        </div>
+
+        <div th:if="${mensagemSucesso}" class="alert alert-success text-center py-2">
+            <span th:text="${mensagemSucesso}"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold" style="color: #145da0;">Usuário</label>
+            <input type="text" name="username" class="form-control bg-light" required autofocus>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-bold" style="color: #145da0;">Senha</label>
+            <input type="password" name="password" class="form-control bg-light" required>
+        </div>
+
+        <button type="submit" class="btn btn-verde w-100 fw-bold py-2 mb-3">Entrar no Sistema</button>
+
+        <div class="text-center">
+            <p class="small mb-0">Não tem uma conta?
+                <a href="/cadastro" class="fw-bold text-decoration-none" style="color: #145da0;">Cadastre-se aqui</a>
+            </p>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
