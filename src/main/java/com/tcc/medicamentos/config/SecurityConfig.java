@@ -31,7 +31,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Ensina o Java a usar a Criptografia BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

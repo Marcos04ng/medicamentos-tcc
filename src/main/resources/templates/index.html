@@ -15,8 +15,8 @@
         --laranja: #ff8c00;
     }
     .sidebar { min-height: 100vh; background-color: var(--azul-logo); }
-    .sidebar a { color: #ecf0f1; text-decoration: none; padding: 15px 20px; display: block; transition: 0.3s; font-size: 1rem; }
-    .sidebar a:hover, .ativo { background-color: var(--azul-escuro); border-left: 5px solid var(--verde-logo); color: white; }
+    .sidebar a, .sidebar button { color: #ecf0f1; text-decoration: none; padding: 15px 20px; display: block; transition: 0.3s; font-size: 1rem; text-align: left; }
+    .sidebar a:hover, .sidebar button:hover, .ativo { background-color: var(--azul-escuro); border-left: 5px solid var(--verde-logo); color: white; }
     .content { background-color: #f4f6f9; padding: 30px; }
     .btn-verde { background-color: var(--verde-logo); color: white; }
     .btn-verde:hover { background-color: var(--verde-escuro); color: white; }
@@ -47,6 +47,14 @@
             <a href="/medicamentos/novo" class="nav-link px-3">
               <i class="bi bi-plus-circle fs-5 me-2"></i> <span class="d-none d-sm-inline">Cadastrar Novo</span>
             </a>
+          </li>
+
+          <li class="w-100 mt-4">
+            <form th:action="@{/logout}" method="post" class="m-0 p-0 w-100">
+              <button type="submit" class="nav-link px-3 text-warning fw-bold bg-transparent border-0 w-100">
+                <i class="bi bi-box-arrow-right fs-5 me-2"></i> <span class="d-none d-sm-inline">Sair do Sistema</span>
+              </button>
+            </form>
           </li>
         </ul>
       </div>
