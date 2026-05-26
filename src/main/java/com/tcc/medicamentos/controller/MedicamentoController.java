@@ -80,4 +80,23 @@ public class MedicamentoController {
 
         return "redirect:/medicamentos";
     }
+    // Rota para abrir o nosso Dashboard (Home)
+    @org.springframework.web.bind.annotation.GetMapping("/home")
+    public String exibirHome(org.springframework.ui.Model model) {
+        // 1. Pega o total geral de remédios
+        long totalRemedios = repository.count();
+
+        // 2. Pega quantos estão com estoque baixo (menos de 5 unidades)
+        long estoqueBaixo = repository.countByQuantidadeLessThan(5);
+
+        // 3. Pega quantos já estão vencidos (comparando com a data de hoje)
+        long vencidos = repository.countByDataValidadeBefore(java.time.LocalDate.now());
+
+        // 4. Manda esses números para o HTML
+        model.addAttribute("total", totalRemedios);
+        model.addAttribute("baixo", estoqueBaixo);
+        model.addAttribute("vencidos", vencidos);
+
+        return "home";
+    }
 }
