@@ -32,14 +32,14 @@ public class LoginController {
 
     @PostMapping("/cadastro/salvar")
     public String salvarNovoUsuario(Usuario usuario, RedirectAttributes attributes) {
-        // 1. Criptografa a senha antes de salvar!
+        //  Criptografa a senha antes de salvar
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
 
-        // 2. Salva no banco de dados
+        // Salva no banco de dados
         usuarioRepository.save(usuario);
 
-        // 3. Avisa que deu certo e volta para o login
+        // Avisa que deu certo e volta para o login
         attributes.addFlashAttribute("mensagemSucesso", "Conta criada com sucesso! Faça seu login.");
         return "redirect:/login";
     }

@@ -19,7 +19,6 @@ public class AutenticacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // 👇 Muda aqui para findFirstByLogin 👇
         Usuario usuario = repository.findFirstByLogin(username);
 
         if (usuario == null) {

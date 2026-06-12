@@ -12,10 +12,10 @@ public class Medicamento {
 
     private String nome;
     private String dosagem;
-    private Integer quantidade; // Novo: Para saber quantos restam
-    private LocalDate dataValidade; // Novo: Usando o tipo de data do Java
+    private Integer quantidade;
+    private LocalDate dataValidade;
 
-    @Column(columnDefinition = "TEXT") // Permite textos longos nas observações
+    @Column(columnDefinition = "TEXT")
     private String observacoes;
 
     // --- GETTERS E SETTERS --- //

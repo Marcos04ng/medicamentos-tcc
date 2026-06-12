@@ -18,7 +18,6 @@ public class MedicamentosApplication {
 	@Bean
 	public CommandLineRunner criarUsuarioPadrao(UsuarioRepository repository, PasswordEncoder encoder) {
 		return args -> {
-			// 👇 Muda aqui para findFirstByLogin 👇
 			if (repository.findFirstByLogin("admin") == null) {
 				Usuario admin = new Usuario();
 				admin.setLogin("admin");
