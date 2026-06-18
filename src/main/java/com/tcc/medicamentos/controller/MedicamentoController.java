@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -18,7 +19,21 @@ public class MedicamentoController {
 
 
     @GetMapping("/")
-    public String menuPrincipal() {
+    public String menuPrincipal(Model model) {
+        // 1. Conta o total de itens no banco
+        long totalItens = repository.count();
+
+        // 2. Conta quantos estão com estoque igual ou menor que 5 (como o seu Paracetamol de Qtd 5)
+        long estoqueBaixo = repository.countByQuantidadeLessThanEqual(5);
+
+        // 3. Conta quantos estão com a data de validade anterior à data de hoje (vencidos)
+        long vencidos = repository.countByDataValidadeBefore(LocalDate.now());
+
+        // Envia os valores exatos para o HTML ler nos cards
+        model.addAttribute("totalItens", totalItens);
+        model.addAttribute("estoqueBaixo", estoqueBaixo);
+        model.addAttribute("itensVencidos", vencidos); // Garante que o nome bate com o que está no seu home.html
+
         return "home";
     }
 

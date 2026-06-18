@@ -9,4 +9,6 @@ import java.time.LocalDate;
 public interface MedicamentoRepository extends JpaRepository<Medicamento, Long> {
     long countByQuantidadeLessThan(int quantidade);
     long countByDataValidadeBefore(LocalDate data);
+
+    long countByQuantidadeLessThanEqual(int i);
 }
