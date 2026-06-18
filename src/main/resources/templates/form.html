@@ -98,13 +98,19 @@
 
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold texto-azul">Data de validade:</label>
-                                    <input type="date" th:field="*{dataValidade}" class="form-control" required>
+                                    <input type="date"
+                                           id="dataValidade"
+                                           name="dataValidade"
+                                           th:value="${medicamento.dataValidade != null ? #temporals.format(medicamento.dataValidade, 'yyyy-MM-dd') : ''}"
+                                           class="form-control"
+                                           required>
                                 </div>
 
                                 <div class="col-12">
                                     <label class="form-label fw-bold texto-azul">Observações (opcional):</label>
-                                    <textarea th:field="*{observacoes}" class="form-control" rows="3" placeholder="Anotações extras..."></textarea>
+                                    <textarea th:field="*{observacoes}" class="form-control" rows="3" maxlength="50" placeholder="Anotações extras... (Máx. 50 caracteres)"></textarea>
                                 </div>
+
 
                                 <div class="col-12 mt-4 pt-2 d-flex gap-2">
                                     <button type="submit" class="btn btn-verde px-4">

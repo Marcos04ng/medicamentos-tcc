@@ -20,21 +20,45 @@ public class Medicamento {
 
     // --- GETTERS E SETTERS --- //
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public String getDosagem() { return dosagem; }
-    public void setDosagem(String dosagem) { this.dosagem = dosagem; }
+    public String getDosagem() {
+        return dosagem;
+    }
+    public void setDosagem(String dosagem) {
+        this.dosagem = dosagem;
+    }
 
-    public Integer getQuantidade() { return quantidade; }
-    public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
 
-    public LocalDate getDataValidade() { return dataValidade; }
-    public void setDataValidade(LocalDate dataValidade) { this.dataValidade = dataValidade; }
+    public LocalDate getDataValidade() {
+        return dataValidade;
+    }
+    public void setDataValidade(LocalDate dataValidade) {
+        this.dataValidade = dataValidade;
+    }
 
-    public String getObservacoes() { return observacoes; }
-    public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
+    public String getObservacoes() {
+        return observacoes;
+    }
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
+    }
 }
