@@ -19,14 +19,13 @@ public class AutenticacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = repository.findFirstByLogin(username);
+        Usuario usuario = repository.findByLogin(username);
 
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuário não encontrado!");
         }
 
-        // Devolve o usuário para o Spring Security verificar a senha
-        return User.builder()
+        return org.springframework.security.core.userdetails.User.builder()
                 .username(usuario.getLogin())
                 .password(usuario.getSenha())
                 .roles("ADMIN")

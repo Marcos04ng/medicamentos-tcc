@@ -18,6 +18,11 @@ public class Medicamento {
     @Column(columnDefinition = "TEXT")
     private String observacoes;
 
+    // Relacionamento para amarrar o medicamento ao usuário dono dele
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
     // --- GETTERS E SETTERS --- //
 
     public Long getId() {
@@ -60,5 +65,12 @@ public class Medicamento {
     }
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
