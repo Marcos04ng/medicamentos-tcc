@@ -91,6 +91,17 @@
                                     <input type="text" th:field="*{dosagem}" class="form-control" placeholder="Ex: 500mg" required>
                                 </div>
 
+                                <div class="mb-3">
+                                    <label for="laboratorio" class="form-label">Laboratório:</label>
+                                    <select th:field="*{laboratorio}" id="laboratorio" class="form-control" required>
+                                        <option value="">-- Selecione um Laboratório --</option>
+                                        <option th:each="lab : ${listaLaboratorios}"
+                                                th:value="${lab.id}"
+                                                th:text="${lab.nome}">
+                                        </option>
+                                    </select>
+                                </div>
+
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold texto-azul">Quantidade (Comprimidos/mL):</label>
                                     <input type="number" th:field="*{quantidade}" class="form-control" placeholder="Ex: 30" min="0" required>
@@ -110,6 +121,7 @@
                                     <label class="form-label fw-bold texto-azul">Observações (opcional):</label>
                                     <textarea th:field="*{observacoes}" class="form-control" rows="3" maxlength="50" placeholder="Anotações extras... (Máx. 50 caracteres)"></textarea>
                                 </div>
+
 
 
                                 <div class="col-12 mt-4 pt-2 d-flex gap-2">

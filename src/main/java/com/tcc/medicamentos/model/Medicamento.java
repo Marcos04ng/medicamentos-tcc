@@ -23,6 +23,10 @@ public class Medicamento {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "laboratorio_id", nullable = true)
+    private Laboratorio laboratorio;
+
     // --- GETTERS E SETTERS --- //
 
     public Long getId() {
@@ -72,5 +76,13 @@ public class Medicamento {
     }
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Laboratorio getLaboratorio() {
+        return laboratorio;
+    }
+
+    public void setLaboratorio(Laboratorio laboratorio) {
+        this.laboratorio = laboratorio;
     }
 }
