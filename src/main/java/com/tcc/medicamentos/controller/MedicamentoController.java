@@ -1,18 +1,13 @@
 package com.tcc.medicamentos.controller;
 
 import com.tcc.medicamentos.model.Medicamento;
-import com.tcc.medicamentos.model.Usuario;
 import com.tcc.medicamentos.repository.MedicamentoRepository;
-import com.tcc.medicamentos.repository.UsuarioRepository; // Importe o seu repositório de usuários
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,38 +17,34 @@ public class MedicamentoController {
     @Autowired
     private MedicamentoRepository repository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository; // Injetado para buscar o usuário logado
 
-    // Método auxiliar privado para buscar o usuário logado
-    private Usuario getUsuarioLogado(Principal principal) {
-        String login = principal.getName();
-        return usuarioRepository.findByLogin(login);
-    }
+    @GetMapping("/")
+    public String menuPrincipal(Model model) {
+        // 1. Conta o total de itens no banco
+        long totalItens = repository.count();
 
-    @GetMapping({"/", "/home"})
-    public String exibirHome(Model model, Principal principal) {
-        Usuario usuario = getUsuarioLogado(principal);
+        // 2. Conta quantos estão com estoque igual ou menor que 5 (como o seu Paracetamol de Qtd 5)
+        long estoqueBaixo = repository.countByQuantidadeLessThanEqual(5);
 
-        long totalRemedios = repository.countByUsuario(usuario);
-        long estoqueBaixo = repository.countByUsuarioAndQuantidadeLessThan(usuario, 5);
-        long vencidos = repository.countByUsuarioAndDataValidadeBefore(usuario, LocalDate.now());
+        // 3. Conta quantos estão com a data de validade anterior à data de hoje (vencidos)
+        long vencidos = repository.countByDataValidadeBefore(LocalDate.now());
 
-        model.addAttribute("total", totalRemedios);
-        model.addAttribute("baixo", estoqueBaixo);
-        model.addAttribute("vencidos", vencidos);
+        // Envia os valores exatos para o HTML ler nos cards
+        model.addAttribute("totalItens", totalItens);
+        model.addAttribute("estoqueBaixo", estoqueBaixo);
+        model.addAttribute("itensVencidos", vencidos); // Garante que o nome bate com o que está no seu home.html
 
         return "home";
     }
 
-    @GetMapping("/medicamentos")
-    public String listarMedicamentos(Model model, Principal principal) {
-        Usuario usuario = getUsuarioLogado(principal);
 
-        List<Medicamento> lista = repository.findByUsuario(usuario);
+    @GetMapping("/medicamentos")
+    public String listarMedicamentos(Model model) {
+        List<Medicamento> lista = repository.findAll();
         model.addAttribute("listaMedicamentos", lista);
         return "index";
     }
+
 
     @GetMapping("/medicamentos/novo")
     public String mostrarFormularioCadastro(Model model) {
@@ -61,48 +52,33 @@ public class MedicamentoController {
         return "form";
     }
 
+
     @PostMapping("/medicamentos/salvar")
-    public String salvarMedicamento(Medicamento medicamento, Principal principal) {
-        Usuario usuario = getUsuarioLogado(principal);
-
-        // Vincula o medicamento ao usuário que está salvando
-        medicamento.setUsuario(usuario);
-
+    public String salvarMedicamento(Medicamento medicamento) {
         repository.save(medicamento);
         return "redirect:/medicamentos";
     }
 
     @GetMapping("/medicamentos/excluir/{id}")
-    public String excluirMedicamento(@PathVariable Long id, Principal principal) {
-        Medicamento remedio = repository.findById(id).orElse(null);
-        Usuario usuario = getUsuarioLogado(principal);
-
-        // só deixa excluir se o remédio pertencer ao usuário logado
-        if (remedio != null && remedio.getUsuario().getId().equals(usuario.getId())) {
-            repository.deleteById(id);
-        }
+    public String excluirMedicamento(@org.springframework.web.bind.annotation.PathVariable Long id) {
+        repository.deleteById(id);
         return "redirect:/medicamentos";
     }
 
     @GetMapping("/medicamentos/editar/{id}")
-    public String editarMedicamento(@PathVariable Long id, Model model, Principal principal) {
-        Medicamento remedio = repository.findById(id).orElse(null);
-        Usuario usuario = getUsuarioLogado(principal);
+    public String editarMedicamento(@org.springframework.web.bind.annotation.PathVariable Long id, Model model) {
 
-        // Segurança: só deixa editar se o remédio se for do próprio usuário
-        if (remedio != null && remedio.getUsuario().getId().equals(usuario.getId())) {
-            model.addAttribute("medicamento", remedio);
-            return "form";
-        }
-        return "redirect:/medicamentos";
+        Medicamento remedio = repository.findById(id).orElse(null);
+        model.addAttribute("medicamento", remedio);
+        return "form";
     }
 
     @GetMapping("/medicamentos/tomar/{id}")
-    public String registrarUso(@PathVariable Long id, RedirectAttributes attributes, Principal principal) {
-        Medicamento remedio = repository.findById(id).orElse(null);
-        Usuario usuario = getUsuarioLogado(principal);
+    public String registrarUso(@org.springframework.web.bind.annotation.PathVariable Long id, org.springframework.web.servlet.mvc.support.RedirectAttributes attributes) {
 
-        if (remedio != null && remedio.getUsuario().getId().equals(usuario.getId())) {
+        Medicamento remedio = repository.findById(id).orElse(null);
+
+        if (remedio != null) {
             if (remedio.getQuantidade() > 0) {
                 remedio.setQuantidade(remedio.getQuantidade() - 1);
                 repository.save(remedio);
@@ -111,6 +87,26 @@ public class MedicamentoController {
                 attributes.addFlashAttribute("mensagemErro", "Atenção: O estoque de " + remedio.getNome() + " já está zerado!");
             }
         }
+
         return "redirect:/medicamentos";
+    }
+
+    @org.springframework.web.bind.annotation.GetMapping("/home")
+    public String exibirHome(org.springframework.ui.Model model) {
+        // Pega o total geral de remédios
+        long totalRemedios = repository.count();
+
+        // Pega quantos estão com estoque baixo (menos de 5 unidades)
+        long estoqueBaixo = repository.countByQuantidadeLessThan(5);
+
+        // Pega quantos já estão vencidos (comparando com a data de hoje)
+        long vencidos = repository.countByDataValidadeBefore(java.time.LocalDate.now());
+
+        // Manda esses números para o HTML
+        model.addAttribute("total", totalRemedios);
+        model.addAttribute("baixo", estoqueBaixo);
+        model.addAttribute("vencidos", vencidos);
+
+        return "home";
     }
 }
